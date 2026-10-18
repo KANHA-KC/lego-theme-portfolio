@@ -6,9 +6,9 @@ import EscapeNav from '@/components/EscapeNav';
 import { getProjects, getProjectBySlug } from '@/lib/data';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -21,7 +21,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const project = getProjectBySlug(params.slug);
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
   if (!project) return { title: 'Case Study Not Found — Studio' };
 
   return {
@@ -35,8 +36,9 @@ export async function generateMetadata({
 
 import CaseStudyViewer from '@/components/CaseStudyViewer';
 
-export default function ProjectCaseStudyPage({ params }: PageProps) {
-  const project = getProjectBySlug(params.slug);
+export default async function ProjectCaseStudyPage({ params }: PageProps) {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
   if (!project) notFound();
 
   const allProjects = getProjects();
