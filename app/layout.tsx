@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Fraunces, Inter, Plus_Jakarta_Sans, Playfair_Display, Fira_Code } from 'next/font/google';
+import { Urbanist, Fraunces, Plus_Jakarta_Sans, Playfair_Display, Fira_Code } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -7,18 +7,12 @@ import CustomCursor from '@/components/CustomCursor';
 import LiquidGlassMount from '@/components/LiquidGlassMount';
 import { ToastProvider } from '@/components/Toast';
 
-const fraunces = Fraunces({
+const urbanist = Urbanist({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-serif',
-  weight: ['300', '400', '500', '600'],
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-sans',
-  weight: ['300', '400', '500', '600'],
+  variable: '--font-urbanist',
+  weight: ['300', '400', '500', '600', '700', '800'],
+  style: ['normal', 'italic'],
 });
 
 const instagramSans = Plus_Jakarta_Sans({
@@ -94,7 +88,7 @@ export default function RootLayout({
       lang="en"
       data-theme="dark"
       data-version="v2"
-      className={`${fraunces.variable} ${inter.variable} ${instagramSans.variable} ${playfair.variable} ${firaCode.variable}`}
+      className={`${urbanist.variable} ${instagramSans.variable} ${playfair.variable} ${firaCode.variable}`}
     >
       <body>
         <a className="skip-link" href="#main">
