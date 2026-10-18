@@ -1,0 +1,715 @@
+/* ==========================================================================
+   BRICK THEME
+   A toy-brick skin layered over globals.css. The page is a studded baseplate
+   seen from above; cards are smooth coloured tiles, buttons are studded
+   bricks, and type is chunky (Lilita One) over rounded body text (Fredoka).
+
+   Everything is scoped to html[data-skin="brick"][data-version] so these
+   rules out-rank the [data-version][data-theme] rules in globals.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Tokens
+   -------------------------------------------------------------------------- */
+html[data-skin="brick"] {
+  /* Brick palette */
+  --brick-red: #D01012;
+  --brick-red-shade: #8E0A0C;
+  --brick-yellow: #FFCD03;
+  --brick-yellow-shade: #C99A00;
+  --brick-blue: #006CB7;
+  --brick-blue-shade: #00487A;
+  --brick-green: #00852B;
+  --brick-green-shade: #00561C;
+  --brick-orange: #FE8A18;
+  --brick-orange-shade: #B9600A;
+  --brick-white: #FFFFFF;
+  --brick-white-shade: #C4C8CC;
+  --brick-black: #1B1B1B;
+  --brick-black-shade: #000000;
+  --brick-gray: #A0A5A9;
+  --brick-dark-gray: #34373B;
+  --brick-dark-gray-shade: #1A1C1E;
+
+  /* Baseplate */
+  --plate: #EEECE6;
+  --plate-stud-hi: #FFFFFF;
+  --plate-stud-lo: #D4D1C8;
+
+  /* Neutral tile (text-heavy surfaces) */
+  --tile-neutral: var(--brick-white);
+  --tile-neutral-shade: var(--brick-white-shade);
+  --tile-neutral-ink: var(--brick-black);
+
+  /* Semantic remaps used throughout globals.css */
+  --bg-paper: var(--plate);
+  --bg-paper-subtle: #E6E3DC;
+  --bg-paper-dark: #DCD9D1;
+  --bg-card: var(--brick-white);
+  --bg-card-hover: #F7F7F7;
+  --bg-surface: var(--brick-white);
+
+  --ink: var(--brick-black);
+  --ink-light: #3A3B3D;
+  --ink-muted: #5E6165;
+  --ink-faint: rgba(0, 0, 0, 0.08);
+
+  --terracotta: var(--brick-red);
+  --terracotta-hover: #B00D0F;
+  --terracotta-subtle: rgba(208, 16, 18, 0.12);
+  --clay: var(--brick-red);
+  --clay-hover: #B00D0F;
+  --clay-subtle: rgba(208, 16, 18, 0.12);
+  --olive: var(--brick-blue);
+  --olive-hover: #005A99;
+  --olive-subtle: rgba(0, 108, 183, 0.12);
+  --olive-dark: var(--brick-blue-shade);
+  --moss: var(--brick-blue);
+  --moss-subtle: rgba(0, 108, 183, 0.12);
+  --sand: var(--ink-muted);
+
+  --border-subtle: #D5D2CA;
+  --border-medium: #BDB9AF;
+  --border-focus: var(--brick-yellow);
+
+  --color-primary: var(--brick-red);
+  --apple-primary: var(--brick-red);
+
+  --accent: var(--brick-red);
+  --accent-shade: var(--brick-red-shade);
+  --accent-ink: #FFFFFF;
+
+  /* Type */
+  --font-display: var(--font-lilita), 'Lilita One', var(--font-fredoka), system-ui, sans-serif;
+  --font-urbanist-stack: var(--font-fredoka), 'Fredoka', ui-rounded, system-ui, -apple-system, sans-serif;
+  --font-heading: var(--font-display);
+  --font-body: var(--font-urbanist-stack);
+  --font-serif: var(--font-display);
+  --font-sans: var(--font-urbanist-stack);
+  --font-instagram: var(--font-urbanist-stack);
+
+  /* Shapes & depth */
+  --rounded-sm: 6px;
+  --rounded-md: 8px;
+  --rounded-lg: 10px;
+  --brick-radius: 10px;
+  --brick-lift: 6px;
+  --shadow-sm: 0 2px 0 rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 0 rgba(0, 0, 0, 0.14), 0 8px 14px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 6px 0 rgba(0, 0, 0, 0.16), 0 14px 24px rgba(0, 0, 0, 0.16);
+  --shadow-hover: 0 10px 0 rgba(0, 0, 0, 0.16), 0 20px 30px rgba(0, 0, 0, 0.18);
+  --snap: cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+html[data-skin="brick"][data-theme="dark"] {
+  --plate: #232527;
+  --plate-stud-hi: #2D3033;
+  --plate-stud-lo: #1B1D1F;
+
+  --tile-neutral: var(--brick-dark-gray);
+  --tile-neutral-shade: var(--brick-dark-gray-shade);
+  --tile-neutral-ink: #F4F4F4;
+
+  --bg-paper: var(--plate);
+  --bg-paper-subtle: #2A2D30;
+  --bg-paper-dark: #1C1E20;
+  --bg-card: var(--brick-dark-gray);
+  --bg-card-hover: #3C3F44;
+  --bg-surface: var(--brick-dark-gray);
+
+  --ink: #F4F4F4;
+  --ink-light: #D3D5D8;
+  --ink-muted: #A3A7AC;
+  --ink-faint: rgba(255, 255, 255, 0.08);
+
+  --terracotta: var(--brick-yellow);
+  --terracotta-hover: #FFD940;
+  --terracotta-subtle: rgba(255, 205, 3, 0.16);
+  --clay: var(--brick-yellow);
+  --clay-hover: #FFD940;
+  --clay-subtle: rgba(255, 205, 3, 0.16);
+  --olive: #4FB0F0;
+  --olive-hover: #6BBEF4;
+  --olive-subtle: rgba(79, 176, 240, 0.16);
+  --moss: #4FB0F0;
+  --moss-subtle: rgba(79, 176, 240, 0.16);
+
+  --border-subtle: #3A3D41;
+  --border-medium: #4A4E53;
+
+  --color-primary: var(--brick-yellow);
+  --apple-primary: var(--brick-yellow);
+
+  --accent: var(--brick-yellow);
+  --accent-shade: var(--brick-yellow-shade);
+  --accent-ink: var(--brick-black);
+
+  --font-serif: var(--font-display);
+  --font-sans: var(--font-urbanist-stack);
+
+  --shadow-sm: 0 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 0 rgba(0, 0, 0, 0.55), 0 8px 14px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 6px 0 rgba(0, 0, 0, 0.6), 0 14px 24px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 10px 0 rgba(0, 0, 0, 0.6), 0 20px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   Skin rules (nested; specificity 0,3,1+ beats globals' 0,3,0)
+   -------------------------------------------------------------------------- */
+html[data-skin="brick"][data-version] {
+
+  /* Colour sets. A surface opts into one and everything inside reads
+     --tile / --tile-shade / --tile-ink, including the global --ink tokens. */
+  .is-tile-red, .stack__card:nth-child(5n+1), .bench-card:nth-child(4n+1) {
+    --tile: var(--brick-red); --tile-shade: var(--brick-red-shade); --tile-ink: #FFFFFF;
+  }
+  .is-tile-yellow, .stack__card:nth-child(5n+2), .bench-card:nth-child(4n+2) {
+    --tile: var(--brick-yellow); --tile-shade: var(--brick-yellow-shade); --tile-ink: var(--brick-black);
+  }
+  .is-tile-blue, .stack__card:nth-child(5n+3), .bench-card:nth-child(4n+3) {
+    --tile: var(--brick-blue); --tile-shade: var(--brick-blue-shade); --tile-ink: #FFFFFF;
+  }
+  .is-tile-green, .stack__card:nth-child(5n+4), .bench-card:nth-child(4n+4) {
+    --tile: var(--brick-green); --tile-shade: var(--brick-green-shade); --tile-ink: #FFFFFF;
+  }
+  .is-tile-orange, .stack__card:nth-child(5n+5) {
+    --tile: var(--brick-orange); --tile-shade: var(--brick-orange-shade); --tile-ink: var(--brick-black);
+  }
+
+  /* Project cards: a coloured brick cover over a neutral tile body. */
+  .project-card:nth-child(4n+1) { --tile-accent: var(--brick-red); --tile-accent-shade: var(--brick-red-shade); --tile-accent-ink: #fff; }
+  .project-card:nth-child(4n+2) { --tile-accent: var(--brick-blue); --tile-accent-shade: var(--brick-blue-shade); --tile-accent-ink: #fff; }
+  .project-card:nth-child(4n+3) { --tile-accent: var(--brick-yellow); --tile-accent-shade: var(--brick-yellow-shade); --tile-accent-ink: var(--brick-black); }
+  .project-card:nth-child(4n+4) { --tile-accent: var(--brick-green); --tile-accent-shade: var(--brick-green-shade); --tile-accent-ink: #fff; }
+
+  /* ---------------------------------------------------------------- Base */
+
+  &, body {
+    background-color: var(--plate);
+    font-family: var(--font-urbanist-stack);
+    letter-spacing: 0;
+  }
+
+  /* Studded baseplate: face, top-left highlight and bottom-right shadow
+     per stud, tiled every 28px. */
+  body {
+    background-image:
+      radial-gradient(circle at 14px 14px, var(--plate) 0 6.5px, transparent 7px),
+      radial-gradient(circle at 13px 13px, var(--plate-stud-hi) 0 7px, transparent 7.5px),
+      radial-gradient(circle at 15.5px 15.5px, var(--plate-stud-lo) 0 7px, transparent 7.5px);
+    background-size: 28px 28px;
+    background-attachment: fixed;
+  }
+
+  /* Paper grain doesn't belong on plastic. */
+  body::before { display: none; }
+
+  /* Plastic, not glass: drop every backdrop blur (also saves GPU work). */
+  *, *::before, *::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  ::selection {
+    background: var(--brick-yellow);
+    color: var(--brick-black);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--brick-yellow);
+    outline-offset: 4px;
+    box-shadow: 0 0 0 6px var(--brick-black);
+  }
+
+  h1, h2, h3, h4,
+  .hero__title, .page-hero__title, .section-head__title,
+  .project-card__title, .principle-item__title, .article-row__title,
+  .article-reader__title, .intro__lede, .stack__face strong,
+  .easter-card h2, .contact-info h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.005em;
+  }
+
+  /* Moulded type has no italics. */
+  em, i, .italic { font-style: normal; }
+
+  p a, .article-reader__body a, .case-study a:not(.btn) {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 3px;
+  }
+
+  code {
+    font-family: var(--font-code);
+    background: var(--tile-neutral);
+    color: var(--tile-neutral-ink);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    box-shadow: 0 2px 0 var(--tile-neutral-shade);
+  }
+
+  /* --------------------------------------------------------------- Tiles */
+
+  .stack__card, .bench-card, .project-card, .principle-item, .article-row,
+  .about-card, .human-card, .metric-box, .contact-form, .email-box,
+  .easter-card, .toast, .case-study__callout, .contact-info {
+    --tile: var(--tile-neutral);
+    --tile-shade: var(--tile-neutral-shade);
+    --tile-ink: var(--tile-neutral-ink);
+  }
+
+  .stack__card, .bench-card, .project-card, .principle-item, .article-row,
+  .about-card, .human-card, .metric-box, .contact-form, .email-box,
+  .easter-card, .toast, .case-study__callout {
+    background: var(--tile);
+    color: var(--tile-ink);
+    border: none;
+    border-radius: var(--brick-radius);
+    box-shadow:
+      inset 0 2px 0 rgba(255, 255, 255, 0.28),
+      inset 0 -3px 0 rgba(0, 0, 0, 0.1),
+      0 var(--brick-lift) 0 var(--tile-shade),
+      0 calc(var(--brick-lift) + 8px) 22px rgba(0, 0, 0, 0.16);
+    transition: transform 0.22s var(--snap), box-shadow 0.22s var(--snap);
+  }
+
+  /* Text inside a tile follows the tile's ink. */
+  .stack__card, .bench-card, .project-card__body, .principle-item, .article-row,
+  .about-card, .human-card, .metric-box, .contact-form, .email-box,
+  .easter-card, .toast, .case-study__callout {
+    --ink: var(--tile-ink);
+    --ink-light: color-mix(in srgb, var(--tile-ink) 85%, transparent);
+    --ink-muted: color-mix(in srgb, var(--tile-ink) 70%, transparent);
+  }
+
+  /* Remove the glass sheen pseudo-elements from globals. */
+  .project-card::before, .bench-card::before,
+  .stack__card::before, .about-card::before {
+    display: none;
+  }
+
+  /* Hover = lift the brick off the plate; active = snap it down. */
+  a.project-card:hover, .stack__card:hover, .bench-card:hover,
+  .article-row:hover, .principle-item:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      inset 0 2px 0 rgba(255, 255, 255, 0.28),
+      inset 0 -3px 0 rgba(0, 0, 0, 0.1),
+      0 calc(var(--brick-lift) + 4px) 0 var(--tile-shade),
+      0 calc(var(--brick-lift) + 16px) 28px rgba(0, 0, 0, 0.2);
+  }
+  a.project-card:active, .article-row:active {
+    transform: translateY(3px);
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.28), 0 2px 0 var(--tile-shade);
+  }
+
+  /* Studs along the top edge of the coloured "brick" cards. */
+  .stack__card, .bench-card {
+    background-image: radial-gradient(circle at 18px 14px,
+      rgba(255, 255, 255, 0.35) 0 5px,
+      rgba(0, 0, 0, 0.14) 5.5px 7px,
+      transparent 7.5px);
+    background-size: 30px 28px;
+    background-repeat: repeat-x;
+    background-position: 6px 0;
+    padding-top: 36px;
+  }
+
+  /* --------------------------------------------------------------- Nav */
+
+  .nav {
+    background: var(--tile-neutral);
+    color: var(--tile-neutral-ink);
+    border: none;
+    border-radius: 14px;
+    box-shadow:
+      inset 0 2px 0 rgba(255, 255, 255, 0.25),
+      0 5px 0 var(--tile-neutral-shade),
+      0 12px 22px rgba(0, 0, 0, 0.16);
+  }
+
+  .nav__links a {
+    font-family: var(--font-urbanist-stack);
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--tile-neutral-ink);
+    transition: transform 0.18s var(--snap), background 0.18s ease, box-shadow 0.18s var(--snap);
+  }
+  .nav__links a::after { display: none; }
+  .nav__links a:hover {
+    background: color-mix(in srgb, var(--tile-neutral-ink) 8%, transparent);
+    transform: translateY(-2px);
+  }
+  .nav__links a.is-active {
+    background: var(--brick-yellow);
+    color: var(--brick-black);
+    box-shadow: 0 3px 0 var(--brick-yellow-shade);
+  }
+
+  .nav__links.is-open {
+    background: var(--tile-neutral);
+    border-radius: 14px;
+    box-shadow: 0 6px 0 var(--tile-neutral-shade), 0 18px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  /* --------------------------------------------------------------- Buttons */
+
+  .btn, .btn-liquid-secondary {
+    --btn: var(--accent);
+    --btn-shade: var(--accent-shade);
+    --btn-ink: var(--accent-ink);
+    position: relative;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    color: var(--btn-ink);
+    background-color: var(--btn);
+    /* Row of studs across the top of the brick. */
+    background-image: radial-gradient(circle at 13px 9px,
+      rgba(255, 255, 255, 0.4) 0 3.5px,
+      rgba(0, 0, 0, 0.16) 4px 5.5px,
+      transparent 6px);
+    background-size: 26px 18px;
+    background-repeat: repeat-x;
+    background-position: 4px 0;
+    border: none;
+    border-radius: 8px;
+    padding: 20px 22px 12px;
+    box-shadow:
+      inset 0 2px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -3px 0 rgba(0, 0, 0, 0.12),
+      0 5px 0 var(--btn-shade),
+      0 10px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.16s var(--snap), box-shadow 0.16s var(--snap);
+  }
+  .btn:hover, .btn-liquid-secondary:hover {
+    transform: translateY(-2px);
+    color: var(--btn-ink);
+    box-shadow:
+      inset 0 2px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -3px 0 rgba(0, 0, 0, 0.12),
+      0 7px 0 var(--btn-shade),
+      0 14px 20px rgba(0, 0, 0, 0.22);
+  }
+  .btn:active, .btn-liquid-secondary:active {
+    transform: translateY(4px);
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 1px 0 var(--btn-shade);
+  }
+
+  .btn--ghost, .btn-liquid-secondary {
+    --btn: var(--tile-neutral);
+    --btn-shade: var(--tile-neutral-shade);
+    --btn-ink: var(--tile-neutral-ink);
+  }
+
+  .btn-liquid__dot { display: none; }
+  .btn-liquid__text, .btn-liquid__arrow { color: inherit; }
+
+  /* Pills, tags and filters: round 1x1 tiles. */
+  .tag-pill, .topic-pill, .filter-btn, .status-pill {
+    font-family: var(--font-urbanist-stack);
+    font-weight: 600;
+    border: none;
+    border-radius: 999px;
+    background: var(--tile-neutral);
+    color: var(--tile-neutral-ink);
+    box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.3), 0 3px 0 var(--tile-neutral-shade);
+    transition: transform 0.16s var(--snap), box-shadow 0.16s var(--snap), background 0.16s ease;
+  }
+  .topic-pill:hover, .filter-btn:hover { transform: translateY(-2px); }
+  .topic-pill.is-selected, .filter-btn.is-active {
+    background: var(--brick-yellow);
+    color: var(--brick-black);
+    box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 3px 0 var(--brick-yellow-shade);
+  }
+  .tag-pill {
+    background: var(--brick-blue);
+    color: #FFFFFF;
+    box-shadow: 0 2px 0 var(--brick-blue-shade);
+  }
+  .filter-bar {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  /* --------------------------------------------------------------- Hero */
+
+  .hero__meta span {
+    font-family: var(--font-urbanist-stack);
+    font-weight: 700;
+    color: #FFFFFF;
+    background: var(--brick-red);
+    padding: 5px 10px;
+    border-radius: 6px;
+    box-shadow: 0 3px 0 var(--brick-red-shade);
+  }
+  .hero__meta span::after, .hero__meta span::before { display: none; }
+  .hero__meta span:nth-child(2) { background: var(--brick-blue); box-shadow: 0 3px 0 var(--brick-blue-shade); }
+  .hero__meta span:nth-child(3) { background: var(--brick-yellow); color: var(--brick-black); box-shadow: 0 3px 0 var(--brick-yellow-shade); }
+  .hero__meta span:nth-child(4) { background: var(--brick-green); box-shadow: 0 3px 0 var(--brick-green-shade); }
+
+  .hero__title {
+    color: var(--ink);
+    line-height: 1.02;
+  }
+  /* Extruded, moulded lettering on the accent line. */
+  .hero__title em {
+    color: var(--accent);
+    text-shadow: 0 5px 0 var(--accent-shade), 0 12px 18px rgba(0, 0, 0, 0.18);
+  }
+  .hero__lede {
+    font-weight: 500;
+    color: var(--ink-light);
+  }
+  .hero__scroll {
+    font-family: var(--font-urbanist-stack);
+    font-weight: 700;
+  }
+
+  /* --------------------------------------------------------------- Sections */
+
+  .section-head__index, .page-hero__meta {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--brick-black);
+    background: var(--brick-yellow);
+    padding: 6px 12px;
+    border-radius: 6px;
+    box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), 0 3px 0 var(--brick-yellow-shade);
+  }
+
+  .intro__lede { color: var(--ink); }
+
+  .stack__face span {
+    font-family: var(--font-display);
+    color: var(--tile-ink);
+    opacity: 0.75;
+  }
+  .stack__card p { color: var(--tile-ink); }
+
+  /* Project cover: the coloured brick on top of the card. */
+  .project-card { overflow: hidden; }
+  .project-card__cover {
+    background: var(--tile-accent);
+    color: var(--tile-accent-ink);
+    border-radius: 0;
+    background-image: radial-gradient(circle at 20px 20px,
+      rgba(255, 255, 255, 0.28) 0 7px,
+      rgba(0, 0, 0, 0.14) 7.5px 9px,
+      transparent 9.5px);
+    background-size: 40px 40px;
+    box-shadow: inset 0 -5px 0 var(--tile-accent-shade);
+  }
+  .project-card__cover .cover-svg { color: var(--tile-accent-ink); opacity: 0.9; }
+  .project-card__cover-art {
+    font-family: var(--font-display);
+    color: var(--tile-accent-ink);
+  }
+  .project-card__meta span, .project-card__footer span {
+    font-weight: 600;
+  }
+
+  /* Principles: number in a round stud badge. */
+  .principle-item__num {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.2em;
+    height: 2.2em;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    background: var(--accent);
+    color: var(--accent-ink);
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.35), 0 3px 0 var(--accent-shade);
+  }
+  .principles__list { display: grid; gap: 18px; border: none; }
+  .principle-item { padding-inline: 20px; }
+
+  /* Writing list */
+  .articles { display: grid; gap: 16px; border: none; }
+  .article-row { padding: 20px 22px; border: none; }
+
+  /* --------------------------------------------------------------- Forms */
+
+  .form-input, .form-textarea, .oracle-input {
+    font-family: var(--font-urbanist-stack);
+    font-weight: 500;
+    background: var(--plate);
+    color: var(--ink);
+    border: 3px solid color-mix(in srgb, var(--ink) 18%, transparent);
+    border-radius: 8px;
+    box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.08);
+  }
+  .form-input:focus, .form-textarea:focus, .oracle-input:focus {
+    border-color: var(--brick-yellow);
+    outline: none;
+    box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.08), 0 0 0 3px var(--brick-black);
+  }
+  .form-group label {
+    font-family: var(--font-urbanist-stack);
+    font-weight: 700;
+  }
+
+  .email-box {
+    --tile: var(--brick-yellow);
+    --tile-shade: var(--brick-yellow-shade);
+    --tile-ink: var(--brick-black);
+    font-family: var(--font-display);
+  }
+
+  /* --------------------------------------------------------------- Chrome */
+
+  .toast {
+    --tile: var(--brick-yellow);
+    --tile-shade: var(--brick-yellow-shade);
+    --tile-ink: var(--brick-black);
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+  }
+
+  .easter-card {
+    --tile: var(--brick-yellow);
+    --tile-shade: var(--brick-yellow-shade);
+    --tile-ink: var(--brick-black);
+  }
+
+  .case-study__callout {
+    --tile: var(--brick-blue);
+    --tile-shade: var(--brick-blue-shade);
+    --tile-ink: #FFFFFF;
+    border-left: none;
+  }
+
+  .metric-box {
+    --tile: var(--brick-yellow);
+    --tile-shade: var(--brick-yellow-shade);
+    --tile-ink: var(--brick-black);
+  }
+
+  /* Footer: a green baseplate strip. */
+  .foot {
+    background-color: var(--brick-green);
+    color: #FFFFFF;
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    border: none;
+    border-radius: 14px 14px 0 0;
+    background-image:
+      radial-gradient(circle at 14px 14px, var(--brick-green) 0 6.5px, transparent 7px),
+      radial-gradient(circle at 13px 13px, rgba(255, 255, 255, 0.28) 0 7px, transparent 7.5px),
+      radial-gradient(circle at 15.5px 15.5px, var(--brick-green-shade) 0 7px, transparent 7.5px);
+    background-size: 28px 28px;
+    box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.18);
+  }
+  .foot p { color: #FFFFFF; }
+
+  .skip-link {
+    background: var(--brick-yellow);
+    color: var(--brick-black);
+    font-family: var(--font-display);
+  }
+
+  /* Reading progress bar: a yellow plate. */
+  .reading-progress, .reading-progress__bar {
+    background: var(--brick-yellow);
+  }
+
+  /* --------------------------------------------------------------- Cursor */
+
+  .cursor.is-hovering { mix-blend-mode: normal; }
+
+  /* GSAP writes inline transforms on .cursor__brick / .cursor__stud to move
+     them, so they are zero-size anchors and the visuals live on children. */
+  .cursor__brick, .cursor__stud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .cursor__brick {
+    --cursor-brick: var(--brick-red);
+    --cursor-brick-shade: var(--brick-red-shade);
+  }
+  .cursor__brick svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    overflow: visible;
+    transform: translate(-50%, -50%) rotate(-12deg);
+    filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.25)) drop-shadow(0 8px 10px rgba(0, 0, 0, 0.2));
+    transition: width 0.25s var(--snap), height 0.25s var(--snap), transform 0.25s var(--snap), filter 0.2s ease;
+  }
+
+  .cursor__stud::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle at 38% 35%, #FFFFFF 0 22%, var(--brick-yellow) 26% 100%);
+    box-shadow: 0 2px 0 var(--brick-yellow-shade), 0 0 0 1.5px var(--brick-black);
+    transition: transform 0.15s var(--snap), opacity 0.15s ease;
+  }
+
+  .cursor.is-hovering .cursor__brick {
+    --cursor-brick: var(--brick-yellow);
+    --cursor-brick-shade: var(--brick-yellow-shade);
+  }
+  .cursor.is-hovering .cursor__brick svg {
+    width: 58px;
+    height: 58px;
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  .cursor.is-hovering .cursor__stud::before { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+  .cursor.cursor--read .cursor__brick { --cursor-brick: var(--brick-blue); --cursor-brick-shade: var(--brick-blue-shade); }
+  .cursor.cursor--play .cursor__brick { --cursor-brick: var(--brick-green); --cursor-brick-shade: var(--brick-green-shade); }
+  .cursor.cursor--open .cursor__brick { --cursor-brick: var(--brick-orange); --cursor-brick-shade: var(--brick-orange-shade); }
+
+  /* Click = the brick snaps down onto the plate. */
+  .cursor.is-pressed .cursor__brick svg {
+    transform: translate(-50%, -50%) rotate(0deg) scale(0.82);
+    filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.3));
+  }
+  .cursor.is-pressed .cursor__stud::before { transform: translate(-50%, -50%) scale(0.7); }
+
+  .cursor__label {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--brick-black);
+    background: var(--brick-yellow);
+    padding: 4px 8px;
+    border-radius: 6px;
+    box-shadow: 0 3px 0 var(--brick-yellow-shade);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="brick"][data-version] {
+    a.project-card:hover, .stack__card:hover, .bench-card:hover,
+    .article-row:hover, .principle-item:hover,
+    .btn:hover, .btn-liquid-secondary:hover {
+      transform: none;
+    }
+  }
+}
+
+/* The figure is solid plastic; show it at full strength. */
+html[data-skin="brick"][data-version] #scene {
+  opacity: 1;
+}

@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import { liquidGlass } from '@/lib/liquid-glass';
 
 export default function CustomCursor() {
   const [cursorState, setCursorState] = useState<{
@@ -22,21 +21,6 @@ export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
-
-  // Initialize liquid glass optics on the cursor ring/blob
-  useEffect(() => {
-    if (!ringRef.current) return;
-    const glass = liquidGlass(ringRef.current, {
-      scale: -80,
-      chroma: 4,
-      border: 0.1,
-      mapBlur: 8,
-      blur: 2.5,
-      saturate: 1.6,
-      fallbackBlur: 14,
-    });
-    return () => glass.destroy();
-  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined' || window.matchMedia('(pointer: coarse)').matches) {
@@ -193,10 +177,28 @@ export default function CustomCursor() {
       className={className}
       aria-hidden="true"
     >
-      <div ref={ringRef} className="cursor__ring">
-        <div className="cursor__glass-specular" />
+      {/* Trailing 2x2 brick seen from above, slightly isometric. */}
+      <div ref={ringRef} className="cursor__brick">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <rect x="2" y="6" width="36" height="32" rx="4" fill="var(--cursor-brick-shade)" />
+          <rect x="2" y="2" width="36" height="32" rx="4" fill="var(--cursor-brick)" />
+          <rect x="3.5" y="3.5" width="33" height="2" rx="1" fill="#fff" opacity="0.35" />
+          {[
+            [12, 12],
+            [28, 12],
+            [12, 25],
+            [28, 25],
+          ].map(([cx, cy]) => (
+            <g key={`${cx}-${cy}`}>
+              <circle cx={cx + 0.8} cy={cy + 1.6} r="5.6" fill="var(--cursor-brick-shade)" />
+              <circle cx={cx} cy={cy} r="5.6" fill="var(--cursor-brick)" />
+              <circle cx={cx - 1.6} cy={cy - 1.8} r="2" fill="#fff" opacity="0.45" />
+            </g>
+          ))}
+        </svg>
       </div>
-      <div ref={dotRef} className="cursor__dot" />
+      {/* Precise pointer: a single stud. */}
+      <div ref={dotRef} className="cursor__stud" />
       <div ref={labelRef} className="cursor__label">
         {cursorState.label}
       </div>

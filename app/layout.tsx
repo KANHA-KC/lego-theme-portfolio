@@ -1,18 +1,26 @@
 import type { Metadata, Viewport } from 'next';
-import { Urbanist, Plus_Jakarta_Sans, Fira_Code } from 'next/font/google';
+import { Fredoka, Lilita_One, Plus_Jakarta_Sans, Fira_Code } from 'next/font/google';
 import './globals.css';
+import './brick-theme.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CustomCursor from '@/components/CustomCursor';
 import LiquidGlassMount from '@/components/LiquidGlassMount';
 import { ToastProvider } from '@/components/Toast';
 
-const urbanist = Urbanist({
+// Brick theme: rounded toy-like body text and chunky display headlines.
+const fredoka = Fredoka({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-urbanist',
-  // Variable font: one file per style covers every weight from 100 to 900.
-  style: ['normal', 'italic'],
+  variable: '--font-fredoka',
+  // Variable font: one file covers weights 300–700.
+});
+
+const lilita = Lilita_One({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-lilita',
+  weight: '400',
 });
 
 const instagramSans = Plus_Jakarta_Sans({
@@ -69,7 +77,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#f4efe6',
+  themeColor: '#FFCD03',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
@@ -89,8 +97,9 @@ export default function RootLayout({
       lang="en"
       data-theme="dark"
       data-version="v2"
+      data-skin="brick"
       suppressHydrationWarning
-      className={`${urbanist.variable} ${instagramSans.variable} ${firaCode.variable}`}
+      className={`${fredoka.variable} ${lilita.variable} ${instagramSans.variable} ${firaCode.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />

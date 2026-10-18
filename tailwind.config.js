@@ -12,10 +12,11 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-urbanist)', 'Urbanist', 'system-ui', '-apple-system', 'sans-serif'],
-        serif: ['var(--font-urbanist)', 'Urbanist', 'system-ui', 'sans-serif'],
-        urbanist: ['var(--font-urbanist)', 'Urbanist', 'sans-serif'],
-        heading: ['var(--font-urbanist)', 'Urbanist', 'sans-serif'],
+        sans: ['var(--font-fredoka)', 'Fredoka', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-lilita)', 'Lilita One', 'var(--font-fredoka)', 'system-ui', 'sans-serif'],
+        urbanist: ['var(--font-fredoka)', 'Fredoka', 'sans-serif'],
+        heading: ['var(--font-lilita)', 'Lilita One', 'sans-serif'],
+        brick: ['var(--font-lilita)', 'Lilita One', 'sans-serif'],
       },
     },
   },
