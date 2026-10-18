@@ -10,7 +10,14 @@ module.exports = {
     preflight: false,
   },
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['var(--font-urbanist)', 'Urbanist', 'system-ui', '-apple-system', 'sans-serif'],
+        serif: ['var(--font-urbanist)', 'Urbanist', 'system-ui', 'sans-serif'],
+        urbanist: ['var(--font-urbanist)', 'Urbanist', 'sans-serif'],
+        heading: ['var(--font-urbanist)', 'Urbanist', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 };

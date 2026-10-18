@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Fraunces, Inter, Plus_Jakarta_Sans, Playfair_Display, Fira_Code } from 'next/font/google';
+import { Urbanist, Plus_Jakarta_Sans, Fira_Code } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -7,18 +7,12 @@ import CustomCursor from '@/components/CustomCursor';
 import LiquidGlassMount from '@/components/LiquidGlassMount';
 import { ToastProvider } from '@/components/Toast';
 
-const fraunces = Fraunces({
+const urbanist = Urbanist({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-serif',
-  weight: ['300', '400', '500', '600'],
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-sans',
-  weight: ['300', '400', '500', '600'],
+  variable: '--font-urbanist',
+  // Variable font: one file per style covers every weight from 100 to 900.
+  style: ['normal', 'italic'],
 });
 
 const instagramSans = Plus_Jakarta_Sans({
@@ -26,13 +20,8 @@ const instagramSans = Plus_Jakarta_Sans({
   display: 'swap',
   variable: '--font-instagram-sans',
   weight: ['400', '500', '600', '700'],
-});
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-playfair',
-  weight: ['400', '500', '600', '700'],
+  // Only used as a fallback on one element; don't compete with critical fonts.
+  preload: false,
 });
 
 const firaCode = Fira_Code({
@@ -40,6 +29,8 @@ const firaCode = Fira_Code({
   display: 'swap',
   variable: '--font-fira-code',
   weight: ['400', '500', '600'],
+  // Only used for code blocks.
+  preload: false,
 });
 
 const siteUrl =
@@ -84,6 +75,10 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 
+// Runs before first paint so returning light-mode visitors don't see a dark flash.
+// Mirrors the theme resolution in Navbar.
+const themeInitScript = `try{var t=localStorage.getItem('studio_theme');document.documentElement.setAttribute('data-theme',t==='light'||t==='paper'||t==='clay'?'light':'dark')}catch(e){}`;
+
 export default function RootLayout({
   children,
 }: {
@@ -94,8 +89,12 @@ export default function RootLayout({
       lang="en"
       data-theme="dark"
       data-version="v2"
-      className={`${fraunces.variable} ${inter.variable} ${instagramSans.variable} ${playfair.variable} ${firaCode.variable}`}
+      suppressHydrationWarning
+      className={`${urbanist.variable} ${instagramSans.variable} ${firaCode.variable}`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body>
         <a className="skip-link" href="#main">
           Skip to content

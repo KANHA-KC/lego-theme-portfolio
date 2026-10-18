@@ -9,9 +9,9 @@ import LiquidSecondaryButton from '@/components/ui/liquid-button';
 import { getArticles, getArticleBySlug } from '@/lib/data';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -24,7 +24,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const article = getArticleBySlug(params.slug);
+  const { slug } = await params;
+  const article = getArticleBySlug(slug);
   if (!article) return { title: 'Article Not Found — Studio' };
 
   return {
@@ -109,8 +110,9 @@ function renderArticleBlocks(blocks: string[]) {
   return elements;
 }
 
-export default function ArticleDetailPage({ params }: PageProps) {
-  const article = getArticleBySlug(params.slug);
+export default async function ArticleDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const article = getArticleBySlug(slug);
   if (!article) notFound();
 
   const allArticles = getArticles();

@@ -20,6 +20,7 @@ export default function ContactForm() {
     email: '',
     message: '',
   });
+  const [honeypot, setHoneypot] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -43,6 +44,7 @@ export default function ContactForm() {
         body: JSON.stringify({
           topic: selectedTopic,
           ...formData,
+          company: honeypot,
         }),
       });
 
@@ -194,6 +196,22 @@ export default function ContactForm() {
           </div>
         </div>
 
+        <div
+          aria-hidden="true"
+          style={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}
+        >
+          <label htmlFor="companyInput">Company</label>
+          <input
+            type="text"
+            id="companyInput"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+          />
+        </div>
+
         <div className="form-group">
           <label htmlFor="nameInput">Your Name</label>
           <input
@@ -202,6 +220,7 @@ export default function ContactForm() {
             className="form-input"
             placeholder="Maya Lin"
             required
+            maxLength={100}
             value={formData.name}
             onChange={(e) =>
               setFormData({ ...formData, name: e.target.value })
@@ -217,6 +236,7 @@ export default function ContactForm() {
             className="form-input"
             placeholder="maya@company.com"
             required
+            maxLength={254}
             value={formData.email}
             onChange={(e) =>
               setFormData({ ...formData, email: e.target.value })
@@ -231,6 +251,7 @@ export default function ContactForm() {
             className="form-textarea"
             placeholder={getPlaceholder()}
             required
+            maxLength={5000}
             rows={5}
             value={formData.message}
             onChange={(e) =>
