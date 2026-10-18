@@ -94,7 +94,8 @@ export default function CustomCursor() {
 
     // Dynamic delegation for hover states on buttons, links, and interactive elements
     const handleMouseOver = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement).closest<HTMLElement>(
+      const el = e.target instanceof Element ? e.target : null;
+      const target = el?.closest<HTMLElement>(
         '[data-cursor], a, button, .btn, .nav__theme-btn, input, textarea, select, [role="button"], label, .work-card, .process-card, .orbit__node'
       );
       if (target) {
@@ -111,7 +112,8 @@ export default function CustomCursor() {
     };
 
     const handleMouseOut = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement).closest<HTMLElement>(
+      const el = e.target instanceof Element ? e.target : null;
+      const target = el?.closest<HTMLElement>(
         '[data-cursor], a, button, .btn, .nav__theme-btn, input, textarea, select, [role="button"], label, .work-card, .process-card, .orbit__node'
       );
       if (target) {
@@ -125,7 +127,8 @@ export default function CustomCursor() {
 
     // Magnetic buttons with GSAP elastic release physics
     const handleMagneticMove = (e: MouseEvent) => {
-      const magnet = (e.target as HTMLElement).closest<HTMLElement>('.btn--magnetic, .btn--primary');
+      const el = e.target instanceof Element ? e.target : null;
+      const magnet = el?.closest<HTMLElement>('.btn--magnetic, .btn--primary');
       if (magnet) {
         const rect = magnet.getBoundingClientRect();
         const x = e.clientX - (rect.left + rect.width / 2);
@@ -141,7 +144,8 @@ export default function CustomCursor() {
     };
 
     const handleMagneticLeave = (e: MouseEvent) => {
-      const magnet = (e.target as HTMLElement).closest<HTMLElement>('.btn--magnetic, .btn--primary');
+      const el = e.target instanceof Element ? e.target : null;
+      const magnet = el?.closest<HTMLElement>('.btn--magnetic, .btn--primary');
       if (magnet) {
         gsap.to(magnet, {
           x: 0,
