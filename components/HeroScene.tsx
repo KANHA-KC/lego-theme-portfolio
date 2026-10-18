@@ -136,7 +136,8 @@ export default function HeroScene() {
         });
 
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        // 1.5x is visually indistinguishable here and renders ~44% fewer pixels than 2x.
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
         // Organic Torus Knot Sculpture with Dynamic Theme Colors
         const geometry = new THREE.TorusKnotGeometry(1.0, 0.32, 100, 24, 2, 3);
@@ -251,7 +252,10 @@ export default function HeroScene() {
         });
 
         const clock = new THREE.Clock();
+        // Only render while the hero is on screen; scrolled-away frames are wasted GPU work.
+        let running = false;
         const animate = () => {
+          if (!running) return;
           animationFrameId = requestAnimationFrame(animate);
 
           const delta = clock.getDelta();
@@ -290,11 +294,24 @@ export default function HeroScene() {
 
           renderer.render(scene, camera);
         };
-        animate();
+
+        const visibilityObserver = new IntersectionObserver(([entry]) => {
+          if (entry.isIntersecting && !running) {
+            running = true;
+            clock.getDelta(); // drop the time spent paused
+            animate();
+          } else if (!entry.isIntersecting && running) {
+            running = false;
+            cancelAnimationFrame(animationFrameId);
+          }
+        });
+        visibilityObserver.observe(canvas!);
 
         cleanupThree = () => {
           if (scrollTriggerInstance) scrollTriggerInstance.kill();
           observer.disconnect();
+          visibilityObserver.disconnect();
+          running = false;
           window.removeEventListener('theme-change', updateSceneTheme);
           window.removeEventListener('version-change', updateSceneTheme);
           window.removeEventListener('mousemove', onMouseMove);
@@ -388,9 +405,15 @@ export default function HeroScene() {
       };
     }
 
-    init();
+    // init() is async (dynamic imports), so the component may unmount before it
+    // finishes; tear down as soon as it does instead of leaking the render loop.
+    let disposed = false;
+    init().then(() => {
+      if (disposed && cleanupThree) cleanupThree();
+    });
 
     return () => {
+      disposed = true;
       if (cleanupThree) cleanupThree();
     };
   }, []);

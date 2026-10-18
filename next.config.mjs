@@ -34,9 +34,6 @@ const nextConfig = {
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },
-  compiler: {
-    styledComponents: true,
-  },
   async redirects() {
     return [
       { source: '/index.html', destination: '/', permanent: true },
