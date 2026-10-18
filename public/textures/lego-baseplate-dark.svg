@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <radialGradient id="studDarkGrad" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#242426" />
+      <stop offset="65%" stop-color="#151517" />
+      <stop offset="100%" stop-color="#0e0e10" />
+    </radialGradient>
+  </defs>
+  <!-- Stud cast shadow -->
+  <circle cx="16" cy="17.2" r="7.2" fill="#000000" opacity="0.65" />
+  <!-- Stud cylinder top -->
+  <circle cx="16" cy="16" r="6.8" fill="url(#studDarkGrad)" stroke="#28282c" stroke-width="0.75" />
+  <!-- Top specular highlight edge -->
+  <circle cx="16" cy="15.5" r="5.6" fill="none" stroke="rgba(255, 255, 255, 0.14)" stroke-width="0.75" />
+  <!-- Inner stud ring with subtle volt neon tint -->
+  <circle cx="16" cy="15.8" r="2.6" fill="none" stroke="rgba(210, 247, 90, 0.18)" stroke-width="0.55" />
+</svg>
