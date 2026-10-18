@@ -139,18 +139,89 @@ export default function HeroScene() {
         // 1.5x is visually indistinguishable here and renders ~44% fewer pixels than 2x.
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
-        // Organic Torus Knot Sculpture with Dynamic Theme Colors
-        const geometry = new THREE.TorusKnotGeometry(1.0, 0.32, 100, 24, 2, 3);
+        // Authentic 3D Lego Brick Geometry (Box + Cylindrical Top Stud)
+        const { mergeGeometries } = await import('three/addons/utils/BufferGeometryUtils.js');
+
+        const brickW = 0.20;
+        const brickH = 0.15;
+        const brickD = 0.20;
+        const boxGeo = new THREE.BoxGeometry(brickW, brickH, brickD);
+
+        const studRadius = 0.056;
+        const studHeight = 0.042;
+        const studGeo = new THREE.CylinderGeometry(studRadius, studRadius, studHeight, 14);
+        studGeo.translate(0, brickH / 2 + studHeight / 2, 0);
+
+        const legoBrickGeo = mergeGeometries([boxGeo, studGeo]);
+
+        // Sample along a Torus Knot curve to form an interlocking Lego brick sculpture
+        const baseGeo = new THREE.TorusKnotGeometry(1.0, 0.35, 110, 22, 2, 3);
+        const posAttr = baseGeo.attributes.position;
+        const step = 0.20;
+        const brickPositions: InstanceType<typeof THREE.Vector3>[] = [];
+        const seen = new Set<string>();
+
+        for (let i = 0; i < posAttr.count; i++) {
+          const x = Math.round(posAttr.getX(i) / step) * step;
+          const y = Math.round(posAttr.getY(i) / step) * step;
+          const z = Math.round(posAttr.getZ(i) / step) * step;
+          const key = `${x.toFixed(3)},${y.toFixed(3)},${z.toFixed(3)}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            brickPositions.push(new THREE.Vector3(x, y, z));
+          }
+        }
+        baseGeo.dispose();
+
+        // Lego ABS Plastic Material with glossy sheen
         const material = new THREE.MeshStandardMaterial({
-          color: targetPreset.sculptureColor,
-          roughness: targetPreset.roughness,
-          metalness: targetPreset.metalness,
-          flatShading: false,
+          color: 0xffffff,
+          roughness: 0.22,
+          metalness: 0.15,
         });
 
-        const sculpture = new THREE.Mesh(geometry, material);
+        const sculpture = new THREE.InstancedMesh(legoBrickGeo, material, brickPositions.length);
+        const dummy = new THREE.Object3D();
+
+        brickPositions.forEach((pos, i) => {
+          dummy.position.copy(pos);
+          dummy.rotation.set(0, 0, 0); // Lego studs point vertically up
+          dummy.scale.set(1, 1, 1);
+          dummy.updateMatrix();
+          sculpture.setMatrixAt(i, dummy.matrix);
+        });
+        sculpture.instanceMatrix.needsUpdate = true;
         sculpture.scale.set(0.85, 0.85, 0.85);
         scene.add(sculpture);
+
+        const updateInstanceColors = (themeName: string) => {
+          const isDark = themeName === 'dark';
+          const baseColor = new THREE.Color(isDark ? 0x141416 : 0xf2f2f5);
+          const accentColor = new THREE.Color(isDark ? 0xd2f75a : 0xff0000);
+          const tempColor = new THREE.Color();
+
+          brickPositions.forEach((pos, i) => {
+            // ~15% accent bricks distributed across the sculpture
+            const isAccent = (i % 7 === 0) || Math.sin(pos.x * 3.5 + pos.z * 2.8) > 0.72;
+            if (isAccent) {
+              sculpture.setColorAt(i, accentColor);
+            } else {
+              const variance = Math.sin(pos.y * 5) * 0.035;
+              tempColor.copy(baseColor);
+              if (isDark) {
+                tempColor.offsetHSL(0, 0, variance);
+              } else {
+                tempColor.offsetHSL(0, 0, -Math.abs(variance));
+              }
+              sculpture.setColorAt(i, tempColor);
+            }
+          });
+          if (sculpture.instanceColor) {
+            sculpture.instanceColor.needsUpdate = true;
+          }
+        };
+
+        updateInstanceColors(initialTheme);
 
         // Ambient & Directional Lighting
         const ambientLight = new THREE.AmbientLight(
@@ -192,6 +263,7 @@ export default function HeroScene() {
           targetAmbientColor.setHex(preset.ambientColor);
           targetKeyColor.setHex(preset.keyColor);
           targetRimColor.setHex(preset.rimColor);
+          updateInstanceColors(themeName);
         };
 
         // MutationObserver to watch data-theme and data-version on <html>
@@ -275,8 +347,7 @@ export default function HeroScene() {
             canvas.style.opacity = `${Math.max(0, 1 - scrollProgress * 1.1)}`;
           }
 
-          // Smoothly interpolate material color, roughness, metalness, and lighting
-          material.color.lerp(targetSculptureColor, 0.055);
+          // Smoothly interpolate material roughness, metalness, and lighting
           material.roughness += (targetPreset.roughness - material.roughness) * 0.055;
           material.metalness += (targetPreset.metalness - material.metalness) * 0.055;
 
@@ -318,7 +389,10 @@ export default function HeroScene() {
           window.removeEventListener('resize', onResize);
           cancelAnimationFrame(animationFrameId);
           renderer.dispose();
-          geometry.dispose();
+          sculpture.dispose();
+          legoBrickGeo.dispose();
+          boxGeo.dispose();
+          studGeo.dispose();
           material.dispose();
         };
       } catch (err) {
